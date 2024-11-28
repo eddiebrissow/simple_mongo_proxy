@@ -8,6 +8,7 @@ import os
 MONGO_SERVER_HOST = os.environ["MONGO_SERVER_HOST"]
 
 MONGO_SERVER_PORT = int(os.environ["MONGO_SERVER_PORT"])
+CACHE_FOLDER = os.environ["CACHE_FOLDER"]) or "."
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -18,7 +19,7 @@ cache = {}
 
 def save_cache():
     print("Saving Cache")
-    with open('cachebin', 'wb') as f:
+    with open(f'{CACHE_FOLDER}/cachebin', 'wb') as f:
         pickle.dump(cache, f)
 
 
