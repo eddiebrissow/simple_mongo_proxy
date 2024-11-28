@@ -60,7 +60,7 @@ async def forward_authentication(reader, writer, mongo_reader, mongo_writer):
             if b'find' in data:
                 cache[query_hash] = mongo_response
                 logger.info(f"Cached response for query {query_hash}")
-                exit_handler()
+                save_cache()
                 
                 
         
