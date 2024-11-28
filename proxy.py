@@ -5,10 +5,11 @@ import pickle
 import atexit
 import os
 
+PROXY_HOST = os.environ.get("PROXY_HOST", "localhost")
+PROXY_PORT = os.environ.get("PROXY_PORT", 5000)
 MONGO_SERVER_HOST = os.environ["MONGO_SERVER_HOST"]
-
 MONGO_SERVER_PORT = int(os.environ["MONGO_SERVER_PORT"])
-CACHE_FOLDER = os.environ["CACHE_FOLDER"]) or "."
+CACHE_FOLDER = os.environ.get("CACHE_FOLDER", ".")
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -107,7 +108,7 @@ async def handle_client(reader, writer):
     await mongo_writer.wait_closed()
     logger.info("Connections closed.")
 
-async def start_proxy(host='localhost', port=5000):
+async def start_proxy(host, port):
     """Starts the TCP proxy server."""
     server = await asyncio.start_server(handle_client, host, port)
     addr = server.sockets[0].getsockname()
@@ -133,5 +134,5 @@ def load_cache():
 if __name__ == '__main__':
     load_cache()
     atexit.register(save_cache)
-    asyncio.run(start_proxy())
+    asyncio.run(start_proxy(PROXY_HOST, PROXY_PORT))
 
